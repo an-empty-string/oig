@@ -1,0 +1,153 @@
+<html>
+
+<head>
+    <title>Invoice-{{ meta.number }}</title>
+    <style>
+        @media print {
+            body {
+                font-size: 80%;
+            }
+        }
+
+        body {
+            max-width: 60em;
+            margin: auto;
+            font-family: "Cantarell", sans-serif;
+        }
+
+        .invoice-logo img {
+            max-height: 10em;
+        }
+
+        .invoice-header {
+            padding: 20px 0;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .invoice-meta {
+            padding-left: 10px;
+            flex: 1;
+            background-color: lightgray;
+        }
+
+        .invoice-title {
+            padding-right: 10px;
+            flex: 3;
+            font-size: 110%;
+            color: black;
+            text-align: right;
+        }
+
+        .invoice-table {
+            width: 100%;
+        }
+
+        .invoice-table {
+            border-collapse: collapse;
+            border-bottom: 1px solid lightgray;
+        }
+
+        .invoice-table th {
+            text-align: left;
+            background-color: lightgray;
+        }
+
+        .invoice-table td,
+        .invoice-table th {
+            padding: 5px;
+            border-left: 1px solid lightgray;
+            border-right: 1px solid lightgray;
+        }
+
+        .invoice-payment-info {
+            display: flex;
+        }
+
+        .invoice-payment-terms {
+            flex: 1;
+        }
+
+        .invoice-payment-approval {
+            min-width: 30em;
+            flex: 1;
+        }
+
+        hr.signature-line {
+            color: black;
+            width: 100%;
+            min-width: 30em;
+            margin-top: 2em;
+        }
+
+        .invoice-footer {
+            background-color: #2C0735;
+            color: white;
+            margin-top: 2em;
+            font-size: 110%;
+            padding: 10px;
+        }
+
+        .nowrap {
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="invoice-header">
+        <div class="invoice-meta">
+            <p class="invoice-date">{{ meta.date.strftime("%Y-%m-%d") }}</p>
+            <p class="invoice-period">For {{ meta.start_date.strftime("%Y-%m-%d") }}<br />to {{ meta.end_date.strftime("%Y-%m-%d") }}</p>
+            <p class="invoice-number">Invoice #{{ meta.number }}</p>
+        </div>
+        <div class="invoice-title">
+            <h2>Invoice</h2>
+            Prepared for {{ meta.customer }}<br />
+        </div>
+    </div>
+
+    <div class="invoice-line-items">
+        <table class="invoice-table">
+            <thead>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td class="nowrap">{{ item.date.strftime("%Y-%m-%d") }}</td>
+                    <td>{{ item.description }}</td>
+                    <td>{{ "{0:.2f}".format(item.hours) }}</td>
+                    <td>{{ "{0:.2f}".format(item.rate) }}</td>
+                    <td>{{ "{0:.2f}".format(item.total) }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <th></th>
+                    <th>Total</th>
+                    <th></th>
+                    <th></th>
+                    <th>{{ "{0:.2f}".format(total) }}</th>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="invoice-payment-info">
+        <div class="invoice-payment-terms">
+            <h3>Payable to</h3>
+            <div>
+                {% for line in meta.payable_to.split("\n") %}
+                {{ line }}{% if not loop.last %}<br />{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
