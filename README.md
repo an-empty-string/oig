@@ -20,6 +20,7 @@ meta:
   date: 2022-03-01
   start_date: 2022-02-01
   end_date: 2022-02-28
+  currency: USD
 
   payable_to: |
     Your Name Here

@@ -101,6 +101,9 @@
             <p class="invoice-date">{{ meta.date.strftime("%Y-%m-%d") }}</p>
             <p class="invoice-period">For {{ meta.start_date.strftime("%Y-%m-%d") }}<br />to {{ meta.end_date.strftime("%Y-%m-%d") }}</p>
             <p class="invoice-number">Invoice #{{ meta.number }}</p>
+{% if meta.currency %}
+            <p>Currency {{ meta.currency }}</p>
+{% endif %}
         </div>
         <div class="invoice-title">
             <h2>Invoice</h2>
