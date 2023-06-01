@@ -12,8 +12,12 @@ for item in invoice["items"]:
     item["rate"] = decimal.Decimal(item["rate"])
     item["total"] = item["hours"] * item["rate"]
 
+hours_total = sum(i["hours"] for i in invoice["items"])
+
 for key in ("date", "start_date", "end_date",):
     invoice["meta"][key] = arrow.get(invoice["meta"][key])
+
+invoice["meta"]["hours_total"] = hours_total
 
 env = jinja2.Environment(loader=jinja2.FileSystemLoader("."))
 rendered = env.get_template("template.html").render(
